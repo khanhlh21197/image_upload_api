@@ -1,0 +1,67 @@
+<configuration>
+    <property name="LOG_PATH" value="../logs"/>
+    <!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} | %magenta([%thread]) | %highlight(%-5level) | %logger{36}.%M - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FULL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/full/full.log</file>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} | [%thread] | %-5level | %logger{36}.%M - %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/full/%d{yyyyMMdd}.%i.txt</fileNamePattern>
+            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
+            <maxFileSize>200MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/error/error.log</file>
+        <!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                    <level>WARN</level>
+                    <onMatch>ACCEPT</onMatch>
+                    <onMismatch>DENY</onMismatch>
+                </filter>-->
+        <filter class="com.khanhlh.imageUpload.config.MultiLogLevelFilter">
+            <levels>WARN|ERROR</levels>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} | [%thread] | %-5level | %logger{36}.%M - %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/error/%d{yyyyMMdd}.%i.txt</fileNamePattern>
+            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
+            <maxFileSize>200MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="logging.level.com.ttsc.natboletService" additivity="false" level="debug">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FULL"/>
+        <appender-ref ref="ERROR"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FULL"/>
+        <appender-ref ref="ERROR"/>
+    </root>
+
+</configuration>

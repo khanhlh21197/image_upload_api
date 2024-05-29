@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Uploaded Images</title>
+    <style>
+        .image-container {
+            width: 200px; /* Width of the container */
+            height: 200px; /* Height of the container */
+            overflow: hidden; /* Hide overflow content */
+        }
+
+        .image-container img {
+            width: 100%; /* Make the image fit the width of the container */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+<body>
+<h1>Uploaded Images</h1>
+<div>
+    <ul>
+        <li th:each="image : ${images}">
+            <div class="image-container">
+                <img th:src="@{'/' + ${image}}" alt="Uploaded Image"/>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
